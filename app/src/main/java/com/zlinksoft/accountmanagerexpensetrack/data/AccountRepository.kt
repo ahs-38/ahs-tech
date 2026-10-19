@@ -1,9 +1,20 @@
 package com.zlinksoft.accountmanagerexpensetrack.data
 
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
-class AccountRepository(private val accountDao: AccountDao, private val transactionDao: TransactionDao) {
+class AccountRepository(
+    private val accountDao: AccountDao,
+    private val transactionDao: TransactionDao
+) {
+
+    private val _isLocked = MutableStateFlow(false)
+    val isLockedFlow: StateFlow<Boolean> = _isLocked.asStateFlow()
+
+    private val _pinCode = MutableStateFlow("")
+    val pinCodeFlow: StateFlow<String> = _pinCode.asStateFlow()
 
     fun getAllAccounts(): Flow<List<Account>> = accountDao.getAllAccounts()
 
@@ -37,4 +48,20 @@ class AccountRepository(private val accountDao: AccountDao, private val transact
     fun getTotalByType(type: String): Flow<Double> = transactionDao.getTotalByType(type)
 
     fun getTotalByAccount(accountId: Long): Flow<Double> = transactionDao.getTotalByAccount(accountId)
+
+    fun getTotalIncome(): Flow<Double> = transactionDao.getTotalByType("Income")
+
+    fun getTotalExpenses(): Flow<Double> = transactionDao.getTotalByType("Expense")
+
+    fun isLocked(): Boolean = _isLocked.value
+
+    fun setLocked(locked: Boolean) {
+        _isLocked.value = locked
+    }
+
+    fun getPinCode(): String = _pinCode.value
+
+    fun setPinCode(pin: String) {
+        _pinCode.value = pin
+    }
 }

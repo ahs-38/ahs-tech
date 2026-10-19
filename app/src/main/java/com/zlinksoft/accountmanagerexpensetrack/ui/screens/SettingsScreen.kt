@@ -12,15 +12,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.zlinksoft.accountmanagerexpensetrack.ui.MainViewModel
-import com.zlinksoft.accountmanagerexpensetrack.utils.PreferencesManager
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
     viewModel: MainViewModel = hiltViewModel()
 ) {
-    val prefsManager = PreferencesManager(LocalContext.current)
-
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(

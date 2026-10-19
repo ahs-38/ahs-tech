@@ -11,16 +11,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.zlinksoft.accountmanagerexpensetrack.ui.MainViewModel
-import com.zlinksoft.accountmanagerexpensetrack.utils.PreferencesManager
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LockScreen(
     viewModel: MainViewModel = hiltViewModel()
 ) {
-    val context = LocalContext.current
-    val isLocked by remember { mutableStateOf(PreferencesManager.isLocked(context)) }
-    val pinCode by remember { mutableStateOf(PreferencesManager.getPinCode(context)) }
+    val isLocked by remember { mutableStateOf(false) }
+    val pinCode by remember { mutableStateOf("") }
 
     if (isLocked) {
         Column(

@@ -15,8 +15,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsState
 import androidx.navigation.NavController
 import com.zlinksoft.accountmanagerexpensetrack.ui.MainViewModel
-import com.zlinksoft.accountmanagerexpensetrack.ui.components.StatCard
-import com.zlinksoft.accountmanagerexpensetrack.ui.components.PrimaryButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -65,7 +63,6 @@ fun DashboardScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(16.dp)
         ) {
-            // Balance Card
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -80,45 +77,20 @@ fun DashboardScreen(
                     modifier = Modifier.padding(24.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(
-                        text = "Net Balance",
-                        color = Color.White.copy(alpha = 0.8f),
-                        fontSize = 16.sp
-                    )
-                    Text(
-                        text = "$${String.format("%.2f", balance)}",
-                        color = Color.White,
-                        fontSize = 32.sp,
-                        fontWeight = FontWeight.Bold
-                    )
+                    Text("Net Balance", color = Color.White.copy(alpha = 0.8f), fontSize = 16.sp)
+                    Text("$${String.format("%.2f", balance)}", color = Color.White, fontSize = 32.sp, fontWeight = FontWeight.Bold)
                 }
             }
 
-            // Stats Row
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Card(
-                    modifier = Modifier.weight(1f),
-                    shape = RoundedCornerShape(12.dp)
-                ) {
-                    Column(
-                        modifier = Modifier.padding(16.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Card(modifier = Modifier.weight(1f), shape = RoundedCornerShape(12.dp)) {
+                    Column(modifier = Modifier.padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                         Text("Income", fontSize = 14.sp, color = Color.Gray)
                         Text("$${String.format("%.2f", income)}", fontSize = 20.sp, fontWeight = FontWeight.Bold)
                     }
                 }
-                Card(
-                    modifier = Modifier.weight(1f),
-                    shape = RoundedCornerShape(12.dp)
-                ) {
-                    Column(
-                        modifier = Modifier.padding(16.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
+                Card(modifier = Modifier.weight(1f), shape = RoundedCornerShape(12.dp)) {
+                    Column(modifier = Modifier.padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                         Text("Expenses", fontSize = 14.sp, color = Color.Gray)
                         Text("$${String.format("%.2f", expenses)}", fontSize = 20.sp, fontWeight = FontWeight.Bold)
                     }
@@ -127,13 +99,7 @@ fun DashboardScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Accounts Section
-            Text(
-                text = "Accounts (${accounts.size})",
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(vertical = 8.dp)
-            )
+            Text("Accounts (${accounts.size})", fontSize = 18.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(vertical = 8.dp))
 
             accounts.forEach { account ->
                 Card(
@@ -153,27 +119,27 @@ fun DashboardScreen(
                             Text(account.name, fontSize = 16.sp, fontWeight = FontWeight.Bold)
                             Text("${account.type} • ${account.currency}", fontSize = 14.sp, color = Color.Gray)
                         }
-                        Text(
-                            "$${String.format("%.2f", account.balance)}",
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold
-                        )
+                        Text("$${String.format("%.2f", account.balance)}", fontSize = 16.sp, fontWeight = FontWeight.Bold)
                     }
                 }
             }
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Action Buttons
-            PrimaryButton(
-                text = "Add Transaction",
+            Button(
                 onClick = { navController.navigate("add_transaction") },
-                modifier = Modifier.fillMaxWidth()
-            )
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = Color.White
+                ),
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Text("Add Transaction")
+            }
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Secondary Button
             TextButton(
                 onClick = { navController.navigate("accounts") },
                 modifier = Modifier.fillMaxWidth()

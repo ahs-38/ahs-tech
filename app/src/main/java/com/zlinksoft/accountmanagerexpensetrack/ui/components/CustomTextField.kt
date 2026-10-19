@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 
 @Composable
-def CustomTextField(
+fun CustomTextField(
     value: String,
     onValueChange: (String) -> Unit,
     placeholder: String = "",

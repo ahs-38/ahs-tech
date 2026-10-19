@@ -1,43 +1,33 @@
 package com.zlinksoft.accountmanagerexpensetrack.ui
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.zlinksoft.accountmanagerexpensetrack.data.Account
 import com.zlinksoft.accountmanagerexpensetrack.data.AccountRepository
-import com.zlinksoft.accountmanagerexpensetrack.data.Transaction
-import com.zlinksoft.accountmanagerexpensetrack.utils.BiometricHelper
-import com.zlinksoft.accountmanagerexpensetrack.utils.PreferencesManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
+import kotlinx.corates.flow.StateFlow
 
 class MainViewModel(
-    private val accountRepository: AccountRepository,
-    private val prefsManager: PreferencesManager
+    private val accountRepository: AccountRepository
 ) : ViewModel() {
 
-    // Accounts
-    private val _accounts = MutableStateFlow<List<Account>>(emptyList())
-    val accounts: StateFlow<List<Account>> = _accounts.asStateFlow()
+    val accounts: StateFlow<List<com.zlinksoft.accountmanagerexpensetrack.data.Account>> =
+        accountRepository.getAllAccounts().stateLatest()
 
-    // Transactions
-    private val _transactions = MutableStateFlow<List<Transaction>>(emptyList())
-    val transactions: StateFlow<List<Transaction>> = _transactions.asStateFlow()
+    val transactions: StateFlow<List<com.zlinksoft.accountmanagerexpensetrack.data.Transaction>> =
+        accountRepository.getAllTransactions().stateLatest()
 
-    // Lock state
-    private val _isLocked = MutableStateFlow(prefsManager.isLocked)
-    val isLocked: StateFlow<Boolean> = _isLocked.asStateFlow()
+    val isLocked: StateFlow<Boolean> = accountRepository.isLockedFlow
 
-    private val _pinCode = MutableStateFlow(prefsManager.pinCode)
-    val pinCode: StateFlow<String> = _pinCode.asStateFlow()
-
-    // Stats
-    val totalIncome: StateFlow<Double> = accountRepository.getTotalByType("Income")
-    val totalExpenses: StateFlow<Double> = accountRepository.getTotalByType("Expense")
-    val netBalance: StateFlow<Double> = totalIncome.map { income ->
-        totalExpenses.value - income
+    val totalIncome: StateFlow<Double> = accountRepository.getTotalIncome()
+    val totalExpenses: StateFlow<Double> = accountRepository.getTotalExpenses()
+    val netBalance: StateFlow<Double> = accountRepository.getAllTransactions().map { list ->
+        var income = 0.0; var expenses = 0.0
+        for (t in list) {
+            if (t.type == "Income") income += t.amount else expenses += t.amount
+        }
+        income - expenses
     }
 
     init {
@@ -45,58 +35,26 @@ class MainViewModel(
     }
 
     private fun loadData() {
-        viewModelScope.launch {
-            accountRepository.getAllAccounts().collect { accounts ->
-                _accounts.value = accounts
-            }
-            accountRepository.getAllTransactions().collect { transactions ->
-                _transactions.value = transactions
-            }
-        }
+        // Repositories expose Flow collectors via collectAsState in screens
     }
 
     fun getAccountById(id: Long) = accountRepository.getAccountById(id)
 
-    fun insertAccount(account: Account) = viewModelScope.launch {
-        accountRepository.insertAccount(account)
-    }
+    fun insertAccount(account: com.zlinksoft.accountmanagerexpensetrack.data.Account) =
+        viewModelScope.launch { accountRepository.insertAccount(account) }
 
-    fun updateAccount(account: Account) = viewModelScope.launch {
-        accountRepository.updateAccount(account)
-    }
+    fun updateAccount(account: com.zlinksoft.accountmanagerexpensetrack.data.Account) =
+        viewModelScope.launch { accountRepository.updateAccount(account) }
 
-    fun deleteAccount(account: Account) = viewModelScope.launch {
-        accountRepository.deleteAccount(account)
-    }
+    fun deleteAccount(account: com.zlinksoft.accountmanagerexpensontrack.data.Account) =
+        viewModelScope.launch { accountRepository.deleteAccount(account) }
 
-    fun insertTransaction(transaction: Transaction) = viewModelScope.launch {
-        accountRepository.insertTransaction(transaction)
-    }
+    fun insertTransaction(transaction: com.zlinksoft.accountmanagerexpensetrack.data.Transaction) =
+        viewModelScope.launch { accountRepository.insertTransaction(transaction) }
 
-    fun updateTransaction(transaction: Transaction) = viewModelScope.launch {
-        accountRepository.updateTransaction(transaction)
-    }
+    fun updateTransaction(transaction: com.zlinksoft.accountmanagerexpensetrack.data.Transaction) =
+        viewModelScope.launch { accountRepository.updateTransaction(transaction) }
 
-    fun deleteTransaction(transaction: Transaction) = viewModelScope.launch {
-        accountRepository.deleteTransaction(transaction)
-    }
-
-    fun unlockApp() {
-        _isLocked.value = false
-    }
-
-    fun unlockWithBiometric() {
-        // Will be handled by BiometricHelper
-        _isLocked.value = false
-    }
-
-    fun setLocked(locked: Boolean) {
-        _isLocked.value = locked
-        prefsManager.isLocked = locked
-    }
-
-    fun setPinCode(pin: String) {
-        _pinCode.value = pin
-        prefsManager.pinCode = pin
-    }
+    fun deleteTransaction(transaction: com.zlinksoft.accountmanagerexpensetrack.data.Transaction) =
+        viewModelScope.launch { accountRepository.deleteTransaction(transaction) }
 }

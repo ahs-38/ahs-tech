@@ -20,7 +20,7 @@ import com.zlinksoft.accountmanagerexpensetrack.ui.MainViewModel
 @Composable
 fun AddTransactionScreen(
     viewModel: MainViewModel = hiltViewModel(),
-    navController:NavController
+    navController: NavController
 ) {
     val accounts by viewModel.accounts.collectAsState(initial = emptyList())
 
