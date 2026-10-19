@@ -1,0 +1,127 @@
+# Gradle
+.gradle/
+build/
+*.iml
+*.ipr
+*.iws
+local.properties
+*.keystore
+*.jks
+
+# IntelliJ
+.idea/
+*.iml
+
+# Eclipse
+ eclipse/
+ .settings/
+ .project
+ .pydevproject
+
+# VS Code
+ .vscode/
+ *.code-workspace
+
+# OS
+.DS_Store
+Thumbs.db
+*.swp
+
+# Build
+ app/build/
+ build/
+ output/
+
+# Cache
+ .gradle/
+ cache/
+ caches/
+
+# Test
+ *.log
+
+# Android
+ *.apk
+ *.aab
+
+# Dependencies
+ node_modules/
+ bower_components/
+ vendor/
+
+# IDE
+ .idea/workspace.xml
+ .idea/tasks.xml
+ .idea/gradle.xml
+ .idea/dictionaries/
+ .idea/libraries/
+ .idea/assetDicts/
+
+# Gradle files
+ gradle.properties
+ !gradle.properties
+
+# Local configuration
+ secrets.properties
+ keystore.properties
+ signing.properties
+
+# Log files
+ *.log
+
+# Generated files
+ generated/
+ gen/
+
+# External dependencies
+ external/
+ lib/
+ libs/
+
+# Maven
+ .mvn/
+ mvnw
+ mvnw.cmd
+ .m2/
+
+# Ant
+ build.xml
+ ant-build.xml
+
+# IntelliJ IDEA
+ .idea/
+ *.iml
+
+# Eclipse
+ .settings/
+ .project
+ .pydevproject
+
+# NetBeans
+ nbproject/
+ nb-configuration.xml
+
+# Android Studio
+ captures/
+ .externalNativeBuild/
+
+# Gradle caches
+ .gradle/
+
+# Keystore files
+ *.jks
+ *.keystore
+
+# ProGuard
+ proguard/
+ *.mapping
+
+# Test reports
+ app/reports/
+ app/test-results/
+ build/reports/
+ build/test-results/
+
+# Documentation
+ docs/
+ README.md
